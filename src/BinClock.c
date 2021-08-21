@@ -31,6 +31,7 @@ void CleanUp(int sig){
 	printf("Cleaning up\n");
 
 	//Set LED to low then input mode
+	digitalWrite(11, 0);
 	//Logic here
 
 
@@ -55,7 +56,7 @@ void initGPIO(void){
 	RTC = wiringPiI2CSetup(RTCAddr); //Set up the RTC
 
 	//Set up the LED, sets pin 3 to OUTPUT
-	pinMode(3, OUTPUT);
+	pinMode(11, OUTPUT);
 
 	printf("LED and RTC done\n");
 
@@ -74,18 +75,13 @@ void initGPIO(void){
 	printf("Setup done\n");
 }
 
-
-/*
- * The main function
- * This function is called, and calls all relevant functions we've written
- */
 int main(void){
 	signal(SIGINT,CleanUp);
 	initGPIO();
 
 	//Set random time (3:04PM)
 	//You can comment this file out later
-	wiringPiI2CWriteReg8(RTC, HOUR_REGISTER, 0x13+TIMEZONE);
+	wiringPiI2CWriteReg8(RTC, HOUR_REGISTER, 0x13+TIMEZONE); // write hour
 	wiringPiI2CWriteReg8(RTC, MIN_REGISTER, 0x4);
 	wiringPiI2CWriteReg8(RTC, SEC_REGISTER, 0x00);
 
