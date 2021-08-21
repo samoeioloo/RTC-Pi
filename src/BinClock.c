@@ -2,11 +2,11 @@
  * BinClock.c
  * Jarrod Olivier
  * Modified by Keegan Crankshaw
- * Further Modified By: Mark Njoroge 
+ * Further Modified By: Mark Njoroge
  *
- * 
- * <STUDNUM_1> <STUDNUM_2>
- * Date
+ *
+ * OLXSAM001 MSNSFI001
+ * 21/08/2021
 */
 
 #include <signal.h> //for catching signals
@@ -43,32 +43,31 @@ void CleanUp(int sig){
 }
 
 void initGPIO(void){
-	/* 
+	/*
 	 * Sets GPIO using wiringPi pins. see pinout.xyz for specific wiringPi pins
 	 * You can also use "gpio readall" in the command line to get the pins
 	 * Note: wiringPi does not use GPIO or board pin numbers (unless specifically set to that mode)
 	 */
 	printf("Setting up\n");
 	wiringPiSetup(); //This is the default mode. If you want to change pinouts, be aware
-	
+
 
 	RTC = wiringPiI2CSetup(RTCAddr); //Set up the RTC
-	
-	//Set up the LED
-	//Write your Logic here
 
-	
+	//Set up the LED, sets pin 3 to OUTPUT
+	pinMode(3, OUTPUT);
+
 	printf("LED and RTC done\n");
-	
+
 	//Set up the Buttons
 	for(int j=0; j < sizeof(BTNS)/sizeof(BTNS[0]); j++){
 		pinMode(BTNS[j], INPUT);
 		pullUpDnControl(BTNS[j], PUD_UP);
 	}
-	
+
 	//Attach interrupts to Buttons
 	//Write your logic here
-	
+
 
 
 	printf("BTNS done\n");
@@ -89,15 +88,15 @@ int main(void){
 	wiringPiI2CWriteReg8(RTC, HOUR_REGISTER, 0x13+TIMEZONE);
 	wiringPiI2CWriteReg8(RTC, MIN_REGISTER, 0x4);
 	wiringPiI2CWriteReg8(RTC, SEC_REGISTER, 0x00);
-	
+
 	// Repeat this until we shut down
 	for (;;){
 		//Fetch the time from the RTC
 		//Write your logic here
-		
+
 		//Toggle Seconds LED
 		//Write your logic here
-		
+
 		// Print out the time we have stored on our RTC
 		printf("The current time is: %d:%d:%d\n", hours, mins, secs);
 
@@ -125,7 +124,7 @@ int hFormat(int hours){
 /*
  * hexCompensation
  * This function may not be necessary if you use bit-shifting rather than decimal checking for writing out time values
- * Convert HEX or BCD value to DEC where 0x45 == 0d45 	
+ * Convert HEX or BCD value to DEC where 0x45 == 0d45
  */
 int hexCompensation(int units){
 
@@ -195,7 +194,7 @@ void hourInc(void){
 	lastInterruptTime = interruptTime;
 }
 
-/* 
+/*
  * minInc
  * Fetch the minute value off the RTC, increase it by 1, and write back
  * Be sure to cater for there only being 60 minutes in an hour
