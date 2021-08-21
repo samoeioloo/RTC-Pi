@@ -106,6 +106,14 @@ int main(void){
 		// Print out the time we have stored on our RTC
 		printf("The current time is: %d:%d:%d\n", hours, mins, secs);
 
+		// print statements
+		if (digitalRead(BTNS[0]) == HIGH) {
+			printf("First button Pressed.\n"); // first button is the one closest to LED
+		}
+
+		if (digitalRead(BTNS[1]) == HIGH){
+			printf("Button 2 Pressed.\n");
+		}
 		//using a delay to make our program "less CPU hungry"
 		delay(1000); //milliseconds
 	}
