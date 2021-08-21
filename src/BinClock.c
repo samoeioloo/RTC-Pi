@@ -58,7 +58,8 @@ void initGPIO(void){
 	RTC = wiringPiI2CSetup(RTCAddr); //Set up the RTC
 
 	//Set up the LED, sets pin 3 to OUTPUT
-	pinMode(11, OUTPUT);
+	pinMode(LED, OUTPUT);
+	pinMode(3, OUTPUT);
 
 	printf("LED and RTC done\n");
 
@@ -91,13 +92,10 @@ int main(void){
 	// initialise hour, min and seconds values
 	// Repeat this until we shut down
 	for (;;){
-		//Fetch the time from the RTC
-		//Write your logic here
 
 		//Toggle Seconds LED
 		led_status = ~led_status;
-		//Write your logic here
-		//reading time from RTC
+		//Fetch the time from the RTC
 		hours = wiringPiI2CReadReg8(RTC, HOUR_REGISTER); // write hour
 		int min_val = wiringPiI2CReadReg8(RTC, MIN_REGISTER); // needs to be converted
 		int sec_val = wiringPiI2CReadReg8(RTC, SEC_REGISTER);
