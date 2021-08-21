@@ -85,12 +85,15 @@ int main(void){
 	wiringPiI2CWriteReg8(RTC, MIN_REGISTER, 0x4);
 	wiringPiI2CWriteReg8(RTC, SEC_REGISTER, 0x00);
 
+	int led_status = 0; // off initially
+
 	// Repeat this until we shut down
 	for (;;){
 		//Fetch the time from the RTC
 		//Write your logic here
 
 		//Toggle Seconds LED
+		led_status = ~led_status;
 		//Write your logic here
 
 		// Print out the time we have stored on our RTC
