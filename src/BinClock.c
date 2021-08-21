@@ -102,7 +102,7 @@ int main(void){
 
 		// convert returned hex values to dec
 		mins = hexCompensation(min_val);
-		seconds = hexCompensation(sec_val);
+		secs = hexCompensation(sec_val);
 		// Print out the time we have stored on our RTC
 		printf("The current time is: %d:%d:%d\n", hours, mins, secs);
 
