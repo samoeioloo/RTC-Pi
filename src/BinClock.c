@@ -18,6 +18,8 @@
 #include "BinClock.h"
 #include "CurrentTime.h"
 
+
+
 //Global variables
 int hours, mins, secs;
 long lastInterruptTime = 0; //Used for button debounce
@@ -31,9 +33,9 @@ void CleanUp(int sig){
 	printf("Cleaning up\n");
 
 	//Set LED to low then input mode
-	digitalWrite(11, 0);
+	digitalWrite(LED, LOW);
 	//Logic here
-
+	pinMode(LED, INPUT);
 
 	for (int j=0; j < sizeof(BTNS)/sizeof(BTNS[0]); j++) {
 		pinMode(BTNS[j],INPUT);
