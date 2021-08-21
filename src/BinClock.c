@@ -34,9 +34,9 @@ void CleanUp(int sig){
 	printf("Cleaning up\n");
 
 	//Set LED to low then input mode
-	digitalWrite(1, LOW);
+	digitalWrite(3, LOW);
 	//Logic here
-	pinMode(1, INPUT);
+	//pinMode(1, INPUT);
 
 	for (int j=0; j < sizeof(BTNS)/sizeof(BTNS[0]); j++) {
 		pinMode(BTNS[j],INPUT);
@@ -59,8 +59,9 @@ void initGPIO(void){
 	RTC = wiringPiI2CSetup(RTCAddr); //Set up the RTC
 
 	//Set up the LED, sets pin 3 to OUTPUT
-	pinMode(1, OUTPUT);
-	//pinMode(3, OUTPUT);
+	//pinMode(1, OUTPUT);
+	pinMode(3, OUTPUT);
+	//digitalWrite(3, LOW);
 
 	printf("LED and RTC done\n");
 
@@ -108,15 +109,23 @@ int main(void){
 		printf("The current time is: %d:%d:%d\n", hours, mins, secs);
 
 		// print statements
-		if (toggle == 0) {
-			digitalWrite(1, HIGH);
-			// delay
-			delay(500);
-			digitalWrite(1, LOW);
-			delay(500;)
-			printf("First button Pressed.\n"); // first button is the one closest to LED
+		if (digitalRead(BTNS[0])==0) {
+			if(hours < 24){
+				wiringPiI2CWriteReg8(RTC, HOUR_REGISTER, hours+1);
+			}
+			else{
+				wiringPiI2CWriteReg8(RTC, HOUR_REGISTER, 0);
+			}
 		}
 
+		if (digitalRead(BTNS[1])==0){
+			if(mins < 60){
+				wiringPiI2CWriteReg8(RTC, MIN_REGISTER,decCompensation(mins+1));
+			}
+			else{
+				wiringPiI2CWriteReg8(RTC,MIN_REGISTER,0);
+			}
+		}
 		//if (digitalRead(BTNS[1]) == HIGH){
 		//	printf("Button 2 Pressed.\n");
 		//}
