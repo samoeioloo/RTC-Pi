@@ -22,6 +22,7 @@
 
 //Global variables
 int hours, mins, secs;
+int toggle=0; // used for toggling LED
 long lastInterruptTime = 0; //Used for button debounce
 int RTC; //Holds the RTC instance
 
@@ -33,9 +34,9 @@ void CleanUp(int sig){
 	printf("Cleaning up\n");
 
 	//Set LED to low then input mode
-	digitalWrite(LED, LOW);
+	digitalWrite(1, LOW);
 	//Logic here
-	pinMode(LED, INPUT);
+	pinMode(1, INPUT);
 
 	for (int j=0; j < sizeof(BTNS)/sizeof(BTNS[0]); j++) {
 		pinMode(BTNS[j],INPUT);
@@ -58,8 +59,8 @@ void initGPIO(void){
 	RTC = wiringPiI2CSetup(RTCAddr); //Set up the RTC
 
 	//Set up the LED, sets pin 3 to OUTPUT
-	pinMode(LED, OUTPUT);
-	pinMode(3, OUTPUT);
+	pinMode(1, OUTPUT);
+	//pinMode(3, OUTPUT);
 
 	printf("LED and RTC done\n");
 
@@ -107,13 +108,18 @@ int main(void){
 		printf("The current time is: %d:%d:%d\n", hours, mins, secs);
 
 		// print statements
-		if (digitalRead(BTNS[0]) == HIGH) {
+		if (toggle == 0) {
+			digitalWrite(1, HIGH);
+			// delay
+			delay(500);
+			digitalWrite(1, LOW);
+			delay(500;)
 			printf("First button Pressed.\n"); // first button is the one closest to LED
 		}
 
-		if (digitalRead(BTNS[1]) == HIGH){
-			printf("Button 2 Pressed.\n");
-		}
+		//if (digitalRead(BTNS[1]) == HIGH){
+		//	printf("Button 2 Pressed.\n");
+		//}
 		//using a delay to make our program "less CPU hungry"
 		delay(1000); //milliseconds
 	}
