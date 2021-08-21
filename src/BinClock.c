@@ -113,8 +113,8 @@ int main(void){
 			// delay
 			delay(500);
 			digitalWrite(1, LOW);
-			delay(500;)
-			printf("First button Pressed.\n"); // first button is the one closest to LED
+			delay(500);
+			printf("button Pressed.\n"); // first button is the one closest to LED
 		}
 
 		//if (digitalRead(BTNS[1]) == HIGH){
