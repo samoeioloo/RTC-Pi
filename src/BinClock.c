@@ -86,7 +86,7 @@ int main(void){
 	wiringPiI2CWriteReg8(RTC, SEC_REGISTER, 0x00);
 
 	int led_status = 0; // off initially
-
+	// initialise hour, min and seconds values
 	// Repeat this until we shut down
 	for (;;){
 		//Fetch the time from the RTC
@@ -95,7 +95,14 @@ int main(void){
 		//Toggle Seconds LED
 		led_status = ~led_status;
 		//Write your logic here
+		//reading time from RTC
+		hours = wiringPiI2CReadReg8(RTC, HOUR_REGISTER); // write hour
+		int min_val = wiringPiI2CReadReg8(RTC, MIN_REGISTER); // needs to be converted
+		int sec_val = wiringPiI2CReadReg8(RTC, SEC_REGISTER);
 
+		// convert returned hex values to dec
+		mins = hexCompensation(min_val);
+		seconds = hexCompensation(sec_val);
 		// Print out the time we have stored on our RTC
 		printf("The current time is: %d:%d:%d\n", hours, mins, secs);
 
