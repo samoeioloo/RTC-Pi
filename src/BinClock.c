@@ -34,9 +34,9 @@ void CleanUp(int sig){
 	printf("Cleaning up\n");
 
 	//Set LED to low then input mode
-	digitalWrite(3, LOW);
+	digitalWrite(LED, LOW);
 	//Logic here
-	//pinMode(1, INPUT);
+	pinMode(LED, INPUT);
 
 	for (int j=0; j < sizeof(BTNS)/sizeof(BTNS[0]); j++) {
 		pinMode(BTNS[j],INPUT);
@@ -60,8 +60,8 @@ void initGPIO(void){
 
 	//Set up the LED, sets pin 3 to OUTPUT
 	//pinMode(1, OUTPUT);
-	pinMode(3, OUTPUT);
-	//digitalWrite(3, LOW);
+	pinMode(LED, OUTPUT);
+	digitalWrite(LED, LOW);
 
 	printf("LED and RTC done\n");
 
@@ -72,7 +72,9 @@ void initGPIO(void){
 	}
 
 	//Attach interrupts to Buttons
-	//Write your logic here
+	wiringPiISR(BTNS[0], INT_EDGE_RISING, hourInc);
+	wiringPiISR(BTNS[1], INT_EDGE_RISING, minInc);
+
 
 
 
@@ -90,42 +92,40 @@ int main(void){
 	wiringPiI2CWriteReg8(RTC, MIN_REGISTER, 0x4);
 	wiringPiI2CWriteReg8(RTC, SEC_REGISTER, 0x00);
 
-	int led_status = 0; // off initially
+	//int led_status = 0; // off initially
+	toggleTime();
 	// initialise hour, min and seconds values
 	// Repeat this until we shut down
 	for (;;){
 
 		//Toggle Seconds LED
-		led_status = ~led_status;
+		//led_status = ~led_status;
 		//Fetch the time from the RTC
-		hours = wiringPiI2CReadReg8(RTC, HOUR_REGISTER); // write hour
+		int hour_val = wiringPiI2CReadReg8(RTC, HOUR_REGISTER); // write hour
 		int min_val = wiringPiI2CReadReg8(RTC, MIN_REGISTER); // needs to be converted
 		int sec_val = wiringPiI2CReadReg8(RTC, SEC_REGISTER);
 
 		// convert returned hex values to dec
+		hours = hexCompensation(hour_val);
 		mins = hexCompensation(min_val);
 		secs = hexCompensation(sec_val);
-		// Print out the time we have stored on our RTC
-		printf("The current time is: %d:%d:%d\n", hours, mins, secs);
 
 		// print statements
-		if (digitalRead(BTNS[0])==0) {
-			if(hours < 24){
-				wiringPiI2CWriteReg8(RTC, HOUR_REGISTER, hours+1);
-			}
-			else{
-				wiringPiI2CWriteReg8(RTC, HOUR_REGISTER, 0);
-			}
+		if (toggle==0) {
+			digitalWrite(LED, HIGH);
+			toggle = ~toggle;
 		}
+		else
+		{
+			digitalWrite(LED, LOW);
+			toggle = ~toggle;
 
-		if (digitalRead(BTNS[1])==0){
-			if(mins < 60){
-				wiringPiI2CWriteReg8(RTC, MIN_REGISTER,decCompensation(mins+1));
-			}
-			else{
-				wiringPiI2CWriteReg8(RTC,MIN_REGISTER,0);
-			}
 		}
+		// Print out the time we have stored on our RTC
+
+		printf("The current time is: %d:%d:%d\n", hours, mins, secs);
+
+
 		//if (digitalRead(BTNS[1]) == HIGH){
 		//	printf("Button 2 Pressed.\n");
 		//}
