@@ -129,7 +129,8 @@ int main(void){
 			//toggle = 0;
 
 		}
-		//printf("F")
+		printf("Button 1: %d\n", BTNS[0]);
+		printf("Button 2: %d\n", BTNS[1]);
 		if (digitalRead(BTNS[0]==0))
 		{
 			printf("Button 1 pressed.\n");
