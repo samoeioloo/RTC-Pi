@@ -62,7 +62,7 @@ void initGPIO(void){
 	pinMode(LED, OUTPUT);
 	toggle = 0;
 	pinMode(3, OUTPUT);
-	//digitalWrite(LED, LOW);
+	digitalWrite(LED, LOW);
 
 	printf("LED and RTC done\n");
 
@@ -101,11 +101,11 @@ int main(void){
 
 		//Toggle Seconds LED
 		toggle = ~toggle;
-		printf("Toggle: %d\n", toggle);
+		//printf("Toggle: %d\n", toggle);
 
 		digitalWrite(3, toggle);
 		//Fetch the time from the RTC
-		hours = wiringPiI2CReadReg8(RTC, HOUR_REGISTER); // write hour
+		hours = wiringPiI2CReadReg8(RTC, HOUR_REGISTER); // read hour
 		int min_val = wiringPiI2CReadReg8(RTC, MIN_REGISTER); // needs to be converted
 		int sec_val = wiringPiI2CReadReg8(RTC, SEC_REGISTER);
 
@@ -129,30 +129,33 @@ int main(void){
 			//toggle = 0;
 
 		}
+		//printf("F")
 		if (digitalRead(BTNS[0]==0))
 		{
+			printf("Button 1 pressed.\n");
 			if(hours<24)
 			{
-				wiringPiI2CReadReg8(RTC, HOUR_REGISTER, hours++); // increment hours
+				wiringPiI2CWriteReg8(RTC, HOUR_REGISTER, hours+1); // increment hours
 
 			}
 			else
 			{
-				wiringPiI2CReadReg8(RTC, HOUR_REGISTER, 0); // midnight
+				wiringPiI2CWriteReg8(RTC, HOUR_REGISTER, 0); // midnight
 
 			}
 		}
 		if(digitalRead(BTNS[1]==0))
 		{
+			printf("Button 2 pressed.\n");
 			if(mins < 60)
 			{
-				wiringPiI2CReadReg8(RTC, MIN_REGISTER, decCompensation(mins++)); // increment hours
+				wiringPiI2CWriteReg8(RTC, MIN_REGISTER, decCompensation(mins+1)); // increment hours
 
 			}
 			else
 			{
-				wiringPiI2CReadReg8(RTC, MIN_REGISTER, 0));
-				wiringPiI2CReadReg8(RTC, HOUR_REGISTER, hours++); // increment hour
+				wiringPiI2CWriteReg8(RTC, MIN_REGISTER, 0);
+				wiringPiI2CWriteReg8(RTC, HOUR_REGISTER, hours+1); // increment hour
 
 			}
 		}
