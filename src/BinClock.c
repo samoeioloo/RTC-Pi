@@ -105,18 +105,21 @@ int main(void){
 
 		digitalWrite(3, toggle);
 		//Fetch the time from the RTC
-		int hour_val = wiringPiI2CReadReg8(RTC, HOUR_REGISTER); // write hour
+		hours = wiringPiI2CReadReg8(RTC, HOUR_REGISTER); // write hour
 		int min_val = wiringPiI2CReadReg8(RTC, MIN_REGISTER); // needs to be converted
 		int sec_val = wiringPiI2CReadReg8(RTC, SEC_REGISTER);
 
 		// convert returned hex values to dec
-		hours = hexCompensation(hour_val);
+		//hours = hexCompensation(hour_val);
 		mins = hexCompensation(min_val);
 		secs = hexCompensation(sec_val);
+		// Print out the time we have stored on our RTC
 
-		// print statements
+		printf("The current time is: %d:%d:%d\n", hours, mins, secs);
+
+		// Toggle LED
 		if (toggle==0) {
-			printf("LED off, writing it to high\n");
+			//printf("LED off, writing it to high\n");
 			digitalWrite(LED, HIGH);
 			//toggle = 1;
 		}
@@ -126,9 +129,33 @@ int main(void){
 			//toggle = 0;
 
 		}
-		// Print out the time we have stored on our RTC
+		if (digitalRead(BTNS[0]==0))
+		{
+			if(hours<24)
+			{
+				wiringPiI2CReadReg8(RTC, HOUR_REGISTER, hours++); // increment hours
 
-		printf("The current time is: %d:%d:%d\n", hours, mins, secs);
+			}
+			else
+			{
+				wiringPiI2CReadReg8(RTC, HOUR_REGISTER, 0); // midnight
+
+			}
+		}
+		if(digitalRead(BTNS[1]==0))
+		{
+			if(mins < 60)
+			{
+				wiringPiI2CReadReg8(RTC, MIN_REGISTER, decCompensation(mins++)); // increment hours
+
+			}
+			else
+			{
+				wiringPiI2CReadReg8(RTC, MIN_REGISTER, 0));
+				wiringPiI2CReadReg8(RTC, HOUR_REGISTER, hours++); // increment hour
+
+			}
+		}
 
 
 		//if (digitalRead(BTNS[1]) == HIGH){
