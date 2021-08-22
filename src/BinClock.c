@@ -123,7 +123,7 @@ int main(void){
 			digitalWrite(LED, HIGH);
 			//toggle = 1;
 		}
-		else if(toggle==1)
+		else if(toggle==-1)
 		{
 			digitalWrite(LED, LOW);
 			//toggle = 0;
@@ -160,13 +160,13 @@ int main(void){
 
 			}
 		}
-
+		//using a delay to make our program "less CPU hungry"
+		delay(1000); //milliseconds
 
 		//if (digitalRead(BTNS[1]) == HIGH){
 		//	printf("Button 2 Pressed.\n");
 		//}
-		//using a delay to make our program "less CPU hungry"
-		delay(1000); //milliseconds
+
 	}
 	return 0;
 }
