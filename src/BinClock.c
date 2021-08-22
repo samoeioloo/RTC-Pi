@@ -59,9 +59,10 @@ void initGPIO(void){
 	RTC = wiringPiI2CSetup(RTCAddr); //Set up the RTC
 
 	//Set up the LED, sets pin 3 to OUTPUT
-	//pinMode(1, OUTPUT);
 	pinMode(LED, OUTPUT);
-	digitalWrite(LED, LOW);
+	toggle = 0;
+	pinMode(3, OUTPUT);
+	//digitalWrite(LED, LOW);
 
 	printf("LED and RTC done\n");
 
@@ -99,7 +100,10 @@ int main(void){
 	for (;;){
 
 		//Toggle Seconds LED
-		//led_status = ~led_status;
+		toggle = ~toggle;
+		printf("Toggle: %d\n", toggle);
+
+		digitalWrite(3, toggle);
 		//Fetch the time from the RTC
 		int hour_val = wiringPiI2CReadReg8(RTC, HOUR_REGISTER); // write hour
 		int min_val = wiringPiI2CReadReg8(RTC, MIN_REGISTER); // needs to be converted
@@ -112,13 +116,14 @@ int main(void){
 
 		// print statements
 		if (toggle==0) {
+			printf("LED off, writing it to high\n");
 			digitalWrite(LED, HIGH);
-			toggle = ~toggle;
+			//toggle = 1;
 		}
-		else
+		else if(toggle==1)
 		{
 			digitalWrite(LED, LOW);
-			toggle = ~toggle;
+			//toggle = 0;
 
 		}
 		// Print out the time we have stored on our RTC
