@@ -126,11 +126,12 @@ int main(void){
 		else if(toggle==-1)
 		{
 			digitalWrite(LED, LOW);
+			//printf("LED switched off");
 			//toggle = 0;
 
 		}
-		printf("Button 1: %d\n", BTNS[0]);
-		printf("Button 2: %d\n", BTNS[1]);
+		printf("Button 1 state : %d\n", digitalRead(BTNS[0]));
+		printf("Button 2 state : %d\n", digitalRead(BTNS[1]));
 		if (digitalRead(BTNS[0]==0))
 		{
 			printf("Button 1 pressed.\n");
@@ -271,6 +272,7 @@ void minInc(void){
 	if (interruptTime - lastInterruptTime>200){
 		printf("Interrupt 2 triggered, %x\n", mins);
 		//Fetch RTC Time
+		mins = hexCompensation(wiringPiI2CReadReg8(RTC,))
 		//Increase minutes by 1, ensuring not to overflow
 		//Write minutes back to the RTC
 	}
