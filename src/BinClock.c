@@ -105,12 +105,12 @@ int main(void){
 
 		digitalWrite(3, toggle);
 		//Fetch the time from the RTC
-		hours = wiringPiI2CReadReg8(RTC, HOUR_REGISTER); // read hour
+		int hour_val = wiringPiI2CReadReg8(RTC, HOUR_REGISTER); // read hour
 		int min_val = wiringPiI2CReadReg8(RTC, MIN_REGISTER); // needs to be converted
 		int sec_val = wiringPiI2CReadReg8(RTC, SEC_REGISTER);
 
 		// convert returned hex values to dec
-		//hours = hexCompensation(hour_val);
+		hours = hexCompensation(hour_val);
 		mins = hexCompensation(min_val);
 		secs = hexCompensation(sec_val);
 		// Print out the time we have stored on our RTC
@@ -132,32 +132,7 @@ int main(void){
 		}
 		//printf("Button 1 state : %d\n", digitalRead(BTNS[0]));
 		//printf("Button 2 state : %d\n", digitalRead(BTNS[1]));
-		/**if (digitalRead(BTNS[0]==0))
-		{
-			printf("Button 1 pressed.\n");
-			if(hours<24)
-			{
-				wiringPiI2CWriteReg8(RTC, HOUR_REGISTER, hours+1); // increment hours
-
-			}
-			else
-			{
-				wiringPiI2CWriteReg8(RTC, HOUR_REGISTER, 0); // midnight
-
-			}
-		}
-		if(digitalRead(BTNS[1]==0))
-		{
-			printf("Button 2 pressed.\n");
-			if(mins < 60)
-			{
-				wiringPiI2CWriteReg8(RTC, MIN_REGISTER, decCompensation(mins+1)); // increment hours
-
-			}
-			else
-			{
-				wiringPiI2CWriteReg8(RTC, MIN_REGISTER, 0);
-				wiringPiI2CWriteReg8(RTC, HOUR_REGISTER, hours+1); // increment hour
+		/**
 
 			}
 		}*/
@@ -255,7 +230,7 @@ void hourInc(void){
 		printf("Interrupt 1 triggered, %x\n", hours);
 		//Fetch RTC Time
 		hours = hexCompensation(wiringPiI2CReadReg8(RTC, HOUR_REGISTER));		//Increase minutes by 1, ensuring not to overflow
-
+		printf("Hours: %d\n", hours);
 		//Increase hours by 1, ensuring not to overflow
 		//Write hours back to the RTC
 		if(hours<=23)
@@ -264,6 +239,7 @@ void hourInc(void){
 		}
 		else
 		{
+			printf("midnight");
 			hours=0;
 		}
 		//Write minutes back to the RTC
@@ -284,13 +260,16 @@ void minInc(void){
 	if (interruptTime - lastInterruptTime>200){
 		printf("Interrupt 2 triggered, %x\n", mins);
 		//Fetch RTC Time
-		mins = hexCompensation(wiringPiI2CReadReg8(RTC, MIN_REGISTER));		//Increase minutes by 1, ensuring not to overflow
+		mins = hexCompensation(wiringPiI2CReadReg8(RTC, MIN_REGISTER));
+		printf("mins: %d\n", mins);
+		//Increase minutes by 1, ensuring not to overflow
 		if(mins<=59)
 		{
 			mins+=1;
 		}
 		else
 		{
+			hours +=1;
 			mins=0;
 		}
 		//Write minutes back to the RTC
