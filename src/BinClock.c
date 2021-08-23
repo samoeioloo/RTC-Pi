@@ -267,7 +267,7 @@ void hourInc(void){
 			hours=0;
 		}
 		//Write minutes back to the RTC
-		wiringPiI2CWriteReg8(RTC, HOUR_REGISTER, hexCompensation(hours));
+		wiringPiI2CWriteReg8(RTC, HOUR_REGISTER, decCompensation(hours));
 	}
 	lastInterruptTime = interruptTime;
 }
@@ -294,7 +294,7 @@ void minInc(void){
 			mins=0;
 		}
 		//Write minutes back to the RTC
-		wiringPiI2CWriteReg8(RTC, MIN_REGISTER, hexCompensation(mins));
+		wiringPiI2CWriteReg8(RTC, MIN_REGISTER, decCompensation(mins));
 		//minutes = ;
 	}
 	lastInterruptTime = interruptTime;
