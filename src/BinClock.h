@@ -26,7 +26,7 @@ const char TIMEZONE = 2; // +02H00 (RSA)
 // define pins
 const int LED = 15;
 const int SECS = 1;
-const int BTNS[] = {5,30}; // B0, B1
+const int BTNS[] = {5,4}; // B0, B1
 
 
 #endif
