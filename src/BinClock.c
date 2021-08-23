@@ -130,9 +130,9 @@ int main(void){
 			//toggle = 0;
 
 		}
-		printf("Button 1 state : %d\n", digitalRead(BTNS[0]));
-		printf("Button 2 state : %d\n", digitalRead(BTNS[1]));
-		if (digitalRead(BTNS[0]==0))
+		//printf("Button 1 state : %d\n", digitalRead(BTNS[0]));
+		//printf("Button 2 state : %d\n", digitalRead(BTNS[1]));
+		/**if (digitalRead(BTNS[0]==0))
 		{
 			printf("Button 1 pressed.\n");
 			if(hours<24)
@@ -160,7 +160,7 @@ int main(void){
 				wiringPiI2CWriteReg8(RTC, HOUR_REGISTER, hours+1); // increment hour
 
 			}
-		}
+		}*/
 		//using a delay to make our program "less CPU hungry"
 		delay(1000); //milliseconds
 
@@ -258,7 +258,7 @@ void hourInc(void){
 
 		//Increase hours by 1, ensuring not to overflow
 		//Write hours back to the RTC
-		if(hours<=59)
+		if(hours<=23)
 		{
 			hours++;
 		}
@@ -285,7 +285,7 @@ void minInc(void){
 		printf("Interrupt 2 triggered, %x\n", mins);
 		//Fetch RTC Time
 		mins = hexCompensation(wiringPiI2CReadReg8(RTC, MIN_REGISTER));		//Increase minutes by 1, ensuring not to overflow
-		if(mins<59)
+		if(mins<=59)
 		{
 			mins++;
 		}
